@@ -1,8 +1,7 @@
 <?php
 
-    require_once('./db/Database.php');
-    require_once('./lib/helpers/helpers.php');   
-
+    include_once __DIR__ . '\..\db\Database.php';
+    include_once __DIR__ . '\..\lib\helpers\helpers.php';   
 
     class Surveys {
 
@@ -37,10 +36,10 @@
                 'survey_id' => $survey,
                 'user_ip' => $ip
             ];
-            // if ($this->_db->query($sql, $params)->resultLength() > 0) { die('You have already voted'); }
+            if ($this->_db->query($sql, $params)->resultLength() > 0) { return 'ERR_HAS_VOTED'; }
 
             // Check if the submitted option is valid
-            if (!$this->isValidOption($survey, $option)) { die('Invalid option'); }
+            if (!$this->isValidOption($survey, $option)) { return 'ERR_INVALID_OPTION'; }
 
             // Submit the vote
             $sql = 'INSERT INTO Votes (survey_id, voted_option, user_ip) VALUES (:survey_id, :voted_option, :user_ip)';
@@ -49,9 +48,8 @@
                 'voted_option' => $option,
                 'user_ip' => $ip
             ];
-            $result = $this->_db->query($sql, $params)->hasFailed();
-            dump($result);
-
+            
+            return !$this->_db->query($sql, $params)->hasFailed();
         }
 
         public function isValidOption($survey, $option) {
@@ -79,6 +77,31 @@
             }
 
             return false;
+        }
+
+        public function submitSurvey() {        
+    
+            $survey = sanitize($_POST['survey_id']);
+            $option = sanitize($_POST['survey_' . $survey]);
+    
+            $result = $this->vote($survey, $option);
+    
+            switch (true) {
+                case $result === true:
+                    echo 'Your vote has been submitted';
+                    break;
+                case $result === false:
+                    echo 'There was an error';
+                    break;
+                case $result === 'ERR_HAS_VOTED':
+                    echo 'You have already voted';
+                    break;
+                case $result === 'ERR_INVALID_OPTION':
+                    echo 'The selected option is not valid';
+                    break;
+                default:
+                    break;
+            }
         }
 
     }
