@@ -1,0 +1,75 @@
+@import 'flex';
+@import 'fonts';
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #FAFAFA;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.c-container {
+    
+    max-width: 525px;
+    width: 100%;
+
+    margin: 0 auto;
+
+    padding: 10px;
+    padding-top: 125px;
+}
+
+.l-survey {
+
+    width: 100%;
+
+    .flex();
+    .flex_col();
+
+    padding: 15px;
+    margin: 15px 0;
+
+    background: #FFF;
+    
+    -webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.25);
+    -moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.25);
+    box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.25);
+
+    .l-survey_question {
+
+        span {
+            display: block;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+    }
+
+    .l-survey-option {
+
+        .flex();
+        .align_center();
+
+        label {
+            margin-left: 5px;
+        }
+    }
+}
+
+.btn {
+    margin-top: 25px;
+    max-width: 125px;
+    border: none;
+    padding: 10px 15px;
+}
+
+.btn-submit {
+    color: white;
+    background: #3C3;
+}
