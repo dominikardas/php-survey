@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sector>
+  <survey>
+    <question>Question One</question>
+    <options>
+        <element>
+            <id>1</id>
+            <option>Option 1</option>
+        </element>
+        <element>
+            <id>2</id>
+            <option>Option 2</option>
+        </element>
+        <element>
+            <id>3</id>
+            <option>Option 3</option>
+        </element>
+    </options>
+  </survey>
+  <survey>
+    <question>Question Two</question>
+    <options>
+        <element>
+            <id>1</id>
+            <option>Option 1</option>
+        </element>
+        <element>
+            <id>2</id>
+            <option>Option 2</option>
+        </element>
+    </options>
+  </survey>
+</sector>

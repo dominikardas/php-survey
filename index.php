@@ -5,10 +5,6 @@
 
     $db = new Surveys();
     $surveys = $db->getAllSurveys();
-    $votes = $db->getAllVotes();
-    // $db->vote(3, 2);
-    // dump($db->isValidOption(2, 1));
-    // dump($_SERVER['REMOTE_ADDR']);
 
 ?>
 
@@ -43,10 +39,17 @@
                             foreach($options as $option) {
                                 $id = rand();
                                 $name = 'survey_' . $survey['id'];
+                                $results = $db->getVotesByOption($survey['id'], $option['id']);
                         ?>
                             <div class="l-survey-option">
-                                <input type="radio" name="<?= $name ?>" id="<?= $id ?>" value="<?= $option['id'] ?>" />
-                                <label for="<?= $id ?>"><?= $option['option'] ?></label>
+                                <div class="l-option_input">
+                                    <input type="radio" name="<?= $name ?>" id="<?= $id ?>" value="<?= $option['id'] ?>" />
+                                    <label for="<?= $id ?>"><?= $option['option'] ?></label>
+                                </div>
+                                <div class="l-option_votes">
+                                    <p class="l-votes"><?= $results['votesPercentage']; ?>% (<?= $results['votes']; ?> votes)</p>
+                                    <div class="l-survey_percentage" style="width:<?= $results['votesPercentage'] ?>%"></div>
+                                </div>
                             </div>
                         <?php } ?>
                     </div>
@@ -56,11 +59,12 @@
             </form>
         <?php } ?>
         
-        <form class="js-form l-form">
+        <form class="js-file-form l-form" method="post" enctype="multipart/form-data" action="survey/create">
             <div class="l-survey l-survey_new">
                 <span>Select XML file to upload</span>
                 <input type="file" name="file" id="file">
                 <input type="submit" class="btn btn-submit" value="Upload" name="submit">
+                <p class="l-resp"></p>
             </div>
         </form>
     </div>

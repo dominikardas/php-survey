@@ -13,16 +13,36 @@
 
         public function getAllSurveys() {
 
-            $sql = "SELECT * FROM Surveys";
+            $sql = 'SELECT * FROM Surveys';
             $data = $this->_db->query($sql)->results();
             return $data;
         }
 
-        public function getAllVotes() {
+        public function getVotesBySurvey($survey) {
+            $sql = 'SELECT * FROM Votes WHERE survey_id=:survey_id';
+            $params = [ 'survey_id' => $survey ];
+            $result = $this->_db->query($sql, $params)->resultLength();
+            // dump($result);
+            return $result;
+        }
 
-            $sql = "SELECT * FROM Votes";
-            $data = $this->_db->query($sql)->results();
-            return $data;
+        public function getVotesByOption($survey, $option) {
+
+            $sql = 'SELECT * FROM Votes WHERE survey_id=:survey_id AND voted_option=:voted_option';
+            $params = [
+                'survey_id' => $survey,
+                'voted_option' => $option
+            ];
+
+            $allVotes = $this->getVotesBySurvey($survey);
+            $votes = $this->_db->query($sql, $params)->resultLength();
+            $votesPercentage = ($votes == 0) ? 0 : round((float)($votes / $allVotes) * 100, 2);
+            // dump($result);
+            return [
+                'votes' => $votes,
+                'votesPercentage' => $votesPercentage
+            ];
+
         }
 
         public function vote($survey, $option) {
@@ -31,12 +51,12 @@
             $ip = $_SERVER['REMOTE_ADDR'];
 
             // Check if the user hasn't already voted
-            $sql = "SELECT * FROM Votes WHERE survey_id=:survey_id AND user_ip=:user_ip";
+            $sql = 'SELECT * FROM Votes WHERE survey_id=:survey_id AND user_ip=:user_ip';
             $params = [
                 'survey_id' => $survey,
                 'user_ip' => $ip
             ];
-            if ($this->_db->query($sql, $params)->resultLength() > 0) { return 'ERR_HAS_VOTED'; }
+            // if ($this->_db->query($sql, $params)->resultLength() > 0) { return 'ERR_HAS_VOTED'; }
 
             // Check if the submitted option is valid
             if (!$this->isValidOption($survey, $option)) { return 'ERR_INVALID_OPTION'; }
@@ -55,7 +75,7 @@
         public function isValidOption($survey, $option) {
 
             // Set up the query
-            $sql = "SELECT * FROM Surveys WHERE id=:id";
+            $sql = 'SELECT * FROM Surveys WHERE id=:id';
             $params = [ 'id' => $survey ];
 
             // If the submitted survey is valid
@@ -102,6 +122,18 @@
                 default:
                     break;
             }
+        }
+
+        public function createSurvey($question, $options) {
+
+            $sql = 'INSERT INTO Surveys (question, options) VALUES (:question, :options)';
+            $params = [
+                "question" => $question,
+                "options" => $options
+            ];
+            $result = $this->_db->query($sql, $params);
+            // dump($result);
+            
         }
 
     }

@@ -4,15 +4,15 @@ $(function() {
 
 function ajaxForm() {
 
-    $('.js-form').on('submit', function (e) {
+    $('.js-form').on('submit', function(e) {
 
         e.preventDefault();
         
         var form = $(this);
 
         $.ajax({
-            type: form.attr('method'),
             url: form.attr('action'),
+            type: form.attr('method'),
             data: form.serialize(),
             success: function (resp) {
                 // alert('form was submitted');

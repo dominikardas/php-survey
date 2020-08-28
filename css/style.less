@@ -41,9 +41,6 @@ body {
     -moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.25);
     box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.25);
 
-    .l-survey_question {
-    }
-
     span {
         display: block;
         text-align: center;
@@ -55,10 +52,29 @@ body {
 
         .flex();
         .align_center();
+        .flex_wrap();
 
         label {
             margin-left: 5px;
         }
+
+        .l-option_input,
+        .l-option_votes {
+            width: 100%;
+        }
+
+        .l-votes {            
+            color: #2A2A2A;
+        }
+
+        .l-survey_percentage {
+            height: 5px;
+            background: #3C3;
+        }
+    }
+
+    .l-survey-option:not(:last-child) {
+        margin-bottom: 20px;
     }
 
     .l-resp {
