@@ -1,11 +1,14 @@
 <?php
+    session_start();
+
+    error_reporting(0);
+    ini_set('display_errors', 0);
 
     include_once __DIR__ . '\lib\helpers\helpers.php';   
-    include_once __DIR__ . '\survey\Surveys.php';
+    include_once __DIR__ . '\survey\Survey.php';
 
-    $db = new Surveys();
+    $db = new Survey();
     $surveys = $db->getAllSurveys();
-
 ?>
 
 <!DOCTYPE html>
@@ -20,46 +23,45 @@
 </head>
 <body>
 
-    <div class="c-container">
-    
+    <div class="c-container">    
         
         <?php
             foreach ($surveys as $survey) { 
                 $survey = (array)($survey); 
         ?>
-            <form class="js-form l-form" method="post" action="survey/submit">
-                <div class="l-survey">
-                    <input type="hidden" name="survey_id" value="<?= $survey['id'] ?>" />
-                    <div class="l-survey_question">
-                        <span><?= $survey['question'] ?></span>
-                    </div>
-                    <div class="l-survey_options">
-                        <?php 
-                            $options = json_decode($survey['options'], true);
-                            foreach($options as $option) {
-                                $id = rand();
-                                $name = 'survey_' . $survey['id'];
-                                $results = $db->getVotesByOption($survey['id'], $option['id']);
-                        ?>
-                            <div class="l-survey-option">
-                                <div class="l-option_input">
-                                    <input type="radio" name="<?= $name ?>" id="<?= $id ?>" value="<?= $option['id'] ?>" />
-                                    <label for="<?= $id ?>"><?= $option['option'] ?></label>
-                                </div>
-                                <div class="l-option_votes">
-                                    <p class="l-votes"><?= $results['votesPercentage']; ?>% (<?= $results['votes']; ?> votes)</p>
-                                    <div class="l-survey_percentage" style="width:<?= $results['votesPercentage'] ?>%"></div>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
-                    <input type="submit" class="btn btn-submit" placeholder="Submit" />
-                    <p class="l-resp"></p>
+        <form class="js-form l-form" method="post" action="survey/submit">
+            <div class="l-survey">
+                <input type="hidden" name="survey_id" value="<?= $survey['id'] ?>" />
+                <div class="l-survey_question">
+                    <span><?= $survey['question'] ?></span>
                 </div>
-            </form>
+                <div class="l-survey_options">
+                    <?php 
+                        $options = json_decode($survey['options'], true);
+                        foreach($options as $option) {
+                            $id = rand();
+                            $name = 'survey_' . $survey['id'];
+                            $results = $db->getVotesByOption($survey['id'], $option['id']);
+                    ?>
+                    <div class="l-survey-option">
+                        <div class="l-option_input">
+                            <input type="radio" name="<?= $name ?>" id="<?= $id ?>" value="<?= $option['id'] ?>" />
+                            <label for="<?= $id ?>"><?= $option['option'] ?></label>
+                        </div>
+                        <div class="l-option_votes">
+                            <p class="l-votes"><?= $results['votesPercentage']; ?>% (<?= $results['votes']; ?> votes)</p>
+                            <div class="l-survey_percentage" style="width:<?= $results['votesPercentage'] ?>%"></div>
+                        </div>
+                    </div>
+                    <?php } ?>
+                </div>
+                <input type="submit" class="btn btn-submit" placeholder="Submit" />
+                <p class="l-resp"></p>
+            </div>
+        </form>
         <?php } ?>
         
-        <form class="js-file-form l-form" method="post" enctype="multipart/form-data" action="survey/create">
+        <form class="l-form" method="post" enctype="multipart/form-data" action="survey/create">
             <div class="l-survey l-survey_new">
                 <span>Select XML file to upload</span>
                 <input type="file" name="file" id="file">

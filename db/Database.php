@@ -1,5 +1,4 @@
 <?php
-
     include_once __DIR__ . '\config.php';
 
     class Database {
@@ -36,7 +35,6 @@
          * 
          * @return object Database object
          */
-
         public function query($sql, $params = []) {
 
             $this->_error = false;
@@ -91,7 +89,5 @@
         public function resultLength() {
             return count($this->_result);
         }
-
     }
-
 ?>

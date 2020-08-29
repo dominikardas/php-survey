@@ -1,6 +1,10 @@
 @import 'flex';
 @import 'fonts';
 
+@primary_clr: #3C3;
+@primary_bg: #FAFAFA;
+@secondary_bg: #FFF;
+
 *,
 *::before,
 *::after {
@@ -10,7 +14,7 @@
 }
 
 body {
-    background-color: #FAFAFA;
+    background-color: @primary_bg;
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -35,7 +39,7 @@ body {
     padding: 15px;
     margin: 15px 0;
 
-    background: #FFF;
+    background: @secondary_bg;
     
     -webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.25);
     -moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.25);
@@ -69,7 +73,7 @@ body {
 
         .l-survey_percentage {
             height: 5px;
-            background: #3C3;
+            background: @primary_clr;
         }
     }
 
@@ -92,7 +96,7 @@ body {
 
 .btn-submit {
     color: white;
-    background: #3C3;
+    background: @primary_clr;
 }
 
 .l-survey_new {
@@ -102,5 +106,5 @@ body {
     min-height: 75px;
     justify-content: space-between;
     align-items: center;
-    background: #FFF;
+    background: @secondary_bg;
 }

@@ -15,9 +15,6 @@ function ajaxForm() {
             type: form.attr('method'),
             data: form.serialize(),
             success: function (resp) {
-                // alert('form was submitted');
-                // alert(resp);
-                console.log(resp);
                 form.find('.l-resp').html(resp);
             }
         });

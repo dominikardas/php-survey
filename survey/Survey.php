@@ -1,9 +1,10 @@
 <?php
+    session_start();
 
     include_once __DIR__ . '\..\db\Database.php';
     include_once __DIR__ . '\..\lib\helpers\helpers.php';   
 
-    class Surveys {
+    class Survey {
 
         private $_db;
 
@@ -14,15 +15,15 @@
         public function getAllSurveys() {
 
             $sql = 'SELECT * FROM Surveys';
-            $data = $this->_db->query($sql)->results();
-            return $data;
+            $result = $this->_db->query($sql)->results();
+            return $result;
         }
 
         public function getVotesBySurvey($survey) {
+
             $sql = 'SELECT * FROM Votes WHERE survey_id=:survey_id';
             $params = [ 'survey_id' => $survey ];
             $result = $this->_db->query($sql, $params)->resultLength();
-            // dump($result);
             return $result;
         }
 
@@ -37,12 +38,11 @@
             $allVotes = $this->getVotesBySurvey($survey);
             $votes = $this->_db->query($sql, $params)->resultLength();
             $votesPercentage = ($votes == 0) ? 0 : round((float)($votes / $allVotes) * 100, 2);
-            // dump($result);
+
             return [
                 'votes' => $votes,
                 'votesPercentage' => $votesPercentage
             ];
-
         }
 
         public function vote($survey, $option) {
@@ -51,12 +51,17 @@
             $ip = $_SERVER['REMOTE_ADDR'];
 
             // Check if the user hasn't already voted
+
+                // By session
+            if (in_array($survey, $_SESSION['voted_surveys'])) { return 'ERR_HAS_VOTED'; }
+
+                // By IP
             $sql = 'SELECT * FROM Votes WHERE survey_id=:survey_id AND user_ip=:user_ip';
             $params = [
                 'survey_id' => $survey,
                 'user_ip' => $ip
             ];
-            // if ($this->_db->query($sql, $params)->resultLength() > 0) { return 'ERR_HAS_VOTED'; }
+            if ($this->_db->query($sql, $params)->resultLength() > 0) { return 'ERR_HAS_VOTED'; }
 
             // Check if the submitted option is valid
             if (!$this->isValidOption($survey, $option)) { return 'ERR_INVALID_OPTION'; }
@@ -131,11 +136,7 @@
                 "question" => $question,
                 "options" => $options
             ];
-            $result = $this->_db->query($sql, $params);
-            // dump($result);
-            
+            $result = $this->_db->query($sql, $params);            
         }
-
     }
-
 ?>
