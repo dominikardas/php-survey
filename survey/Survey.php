@@ -114,6 +114,7 @@
             switch (true) {
                 case $result === true:
                     echo 'Your vote has been submitted';
+                    return true;
                     break;
                 case $result === false:
                     echo 'There was an error';
@@ -127,6 +128,8 @@
                 default:
                     break;
             }
+
+            return false;
         }
 
         public function createSurvey($question, $options) {
